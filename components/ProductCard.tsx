@@ -1,10 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { discountPct, formatPrice, installment } from "@/lib/format";
+import { fill } from "@/lib/i18n";
+import { useLocale } from "./i18n/LocaleProvider";
 import { ProductVisual } from "./ProductVisual";
 import { AddToCartButton } from "./cart/AddToCartButton";
 
 export function ProductCard({ product }: { product: Product }) {
+  const { t, locale } = useLocale();
   const off = discountPct(product.price, product.compareAtPrice);
 
   return (
@@ -15,12 +20,14 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
         {(product.badge || off) && (
           <span className="absolute left-3 top-3 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white">
-            {product.badge ?? `${off}% OFF`}
+            {product.badge ? product.badge[locale] : `${off}% OFF`}
           </span>
         )}
       </Link>
       <div className="flex flex-1 flex-col gap-1 p-4">
-        <span className="text-xs uppercase tracking-wide text-soft">{product.category}</span>
+        <span className="text-xs uppercase tracking-wide text-soft">
+          {t.categoryLabels[product.category] ?? product.category}
+        </span>
         <Link href={`/productos/${product.slug}`} className="font-semibold leading-tight hover:text-primary">
           {product.name}
         </Link>
@@ -30,7 +37,7 @@ export function ProductCard({ product }: { product: Product }) {
             <span className="text-sm text-soft line-through">{formatPrice(product.compareAtPrice)}</span>
           )}
         </div>
-        <p className="text-xs text-soft">3 cuotas sin interés de {installment(product.price)}</p>
+        <p className="text-xs text-soft">{fill(t.card.installments, { v: installment(product.price) })}</p>
         <div className="mt-3">
           <AddToCartButton slug={product.slug} />
         </div>

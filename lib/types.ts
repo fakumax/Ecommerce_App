@@ -1,17 +1,28 @@
+export interface Localized {
+  es: string;
+  en: string;
+}
+
 export interface Product {
   slug: string;
   name: string;
   category: string;
   price: number;
   compareAtPrice?: number;
-  description: string;
-  features: string[];
+  description: Localized;
+  features: { es: string[]; en: string[] };
   hue: number;
   featured?: boolean;
-  badge?: string;
+  badge?: Localized;
 }
 
 export interface CartItem {
   slug: string;
   qty: number;
+}
+
+export interface User {
+  name: string;
+  email?: string;
+  provider: "email" | "google" | "facebook";
 }

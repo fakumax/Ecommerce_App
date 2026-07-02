@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Poppins, Space_Grotesk, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { LocaleProvider } from "@/components/i18n/LocaleProvider";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { ThemePanel } from "@/components/theme/ThemePanel";
@@ -16,11 +18,11 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfa
 
 export const metadata: Metadata = {
   title: {
-    default: "mitienda · Ecommerce moderno",
+    default: "mitienda · Tienda online",
     template: "%s · mitienda",
   },
   description:
-    "MVP de ecommerce construido con Next.js y Tailwind CSS. Colores y tipografía personalizables en vivo.",
+    "Tienda online con envío gratis a todo el país y hasta 6 cuotas sin interés.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -34,15 +36,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeScript />
       </head>
       <body className="flex min-h-screen flex-col antialiased">
-        <ThemeProvider>
-          <CartProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <CartDrawer />
-            <ThemePanel />
-          </CartProvider>
-        </ThemeProvider>
+        <LocaleProvider>
+          <AuthProvider>
+            <ThemeProvider>
+              <CartProvider>
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <CartDrawer />
+                <ThemePanel />
+              </CartProvider>
+            </ThemeProvider>
+          </AuthProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

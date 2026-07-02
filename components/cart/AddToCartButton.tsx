@@ -1,9 +1,11 @@
 "use client";
 
 import { useCart } from "./CartProvider";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 
 export function AddToCartButton({ slug, big = false }: { slug: string; big?: boolean }) {
   const { add } = useCart();
+  const { t } = useLocale();
   return (
     <button
       onClick={() => add(slug)}
@@ -11,7 +13,7 @@ export function AddToCartButton({ slug, big = false }: { slug: string; big?: boo
         big ? "w-full py-3.5 text-base" : "px-4 py-2 text-sm"
       }`}
     >
-      Agregar al carrito
+      {t.card.addToCart}
     </button>
   );
 }
